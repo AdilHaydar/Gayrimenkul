@@ -1,0 +1,85 @@
+{% extends "main_page.html" %}
+
+
+{% block icerik %}
+<div class="container" style="margin-top:50px;">
+		<form style="margin-bottom:15px;">
+		  <div class="row" style="padding:10px;" align="center">
+		  <input class="form-control form-control-sm ml-3 w-75" type="text" placeholder="İlanlarda Arayın"
+			aria-label="Search" style="font-size:18px;">
+			<button type="submit" style="color:black;margin-left:10px;" class="btn btn-outline-light">Ara</button></div>
+		</form>
+		
+		<table class="table table-striped" style="text-align:center;">
+		
+			<tr>
+				<th></th>
+				<th>İlan Başlığı</th>
+				<th>m²</th>
+				<th>Oda Sayısı</th>
+				<th>Fiyat</th>
+				<th>İlan Tarihi</th>
+				<th>İl / İlçe</th>
+			</tr>
+			{% for post in posts %}
+			<tr id="{% url 'gayrimenkul:detail' post.slug %}" onclick="onClickFunction(this.id)">
+				<td><img src="{{ post.get_image_or_default }}" width="100px" height="100px;"></td>
+				<td style="margin-top:10px;">{{post.title}}</td>
+				<td>{{post.mkare}}</td>
+				<td>{{post.oda_sayisi}}</td>
+				<td>{{post.price}}₺</td>
+				<td>{{post.created_date}}</td>
+				<td>{{post.il}} / {{post.ilce}}</td>
+			</tr>
+			{% endfor %}
+			
+			
+		</table>
+		{% if posts.has_other_pages %}
+		<nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if posts.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+            <li class="disabled page-item"><span class="page-link">&laquo;</span></li>
+            {% endif %}
+            {% for i in posts.paginator.page_range %}
+                {% if posts.number == i %}
+                <li class="activate page-item"><span class="page-link">{{ i }}<span class="sr-only">(current)</span></span></li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if posts.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number}}">&raquo;</a></li>
+            {% else %}
+            <li class="disabled page-item"><span class="page-link">&raquo;</span></li>
+            {% endif %}
+        </ul>
+		</nav>
+        {% endif %}
+	</div>
+	<script>
+		function onClickFunction(parametre){
+			window.location = parametre;
+		}
+	</script>
+
+<style>
+	table tr td:nth-child(2){
+		color:blue;
+		text-decoration:underline;
+	}
+	table tr:hover{
+		background-color:lightblue !important;
+		cursor:pointer;
+	}
+	table tr:first-child:hover{
+		background-color:lightgray !important;
+		cursor:auto;
+	}
+</style>
+
+{% endblock icerik %}
+	
+

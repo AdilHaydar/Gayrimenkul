@@ -1,0 +1,20 @@
+{% extends "main_page.html"%}
+{% load crispy_forms_tags %}
+
+{% block icerik %}
+
+
+<div class="row" style="margin-top:10px;">
+  <div class="col-md-6 offset-md-3">
+        <h3>Register</h3>
+    <hr style="background:white;">
+     <form method="post" id="new_user_form">
+        {% csrf_token %}
+        {{form|crispy}}
+        <br>
+        <button type="submit" class ="btn btn-danger">Register</button>
+    </form>
+  </div>
+</div>
+
+{% endblock icerik %}

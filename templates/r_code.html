@@ -1,0 +1,55 @@
+{% extends "main_page.html" %}
+{% load crispy_forms_tags %}
+{% block icerik %}
+
+<div class="row">
+<div class="container">
+  <div class="col-md-6 col-lg-12 offset-lg-12" align="center">
+        <h3>Davet Kodu Oluştur</h3>
+    <hr style="background:white;">
+     <form method="post">
+        {% csrf_token %}
+        <button type="submit" class ="btn btn-danger">Kodu Oluştur</button>
+    </form>
+    <hr>
+    <br>
+    
+  <table class="table table-striped table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Davet Kodu</th>
+      <th scope="col">Aktiflik Durumu</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for row in rows %}
+  <tr>
+      {% comment %} <th scope="row">{{row.0}}</th> {% endcomment %}
+      <td>{{row.0}}</td>
+      {% if row.1 == False %}
+      <td>Aktif</td>
+      {% else %}
+      <td>Kullanılmış</td>
+      {% endif %}
+      
+    </tr>
+  {% endfor %}
+
+  </tbody>
+</table>
+</div>
+  </div>
+</div>
+<style>
+  td{
+    background: rgba(6, 66, 143, 0.678);
+  }
+  tbody{
+    background:rgba(18, 43, 128, 0.959) !important;
+  }
+  thead{
+    background: rgba(72, 93, 161, 0.87);
+  }
+</style>
+{% endblock icerik %}
+

@@ -1,0 +1,39 @@
+{% extends "main_page.html" %}
+{% load static %}
+{% block icerik %}
+{% load crispy_forms_tags %}
+<div class="row">
+<div class="container">
+
+    <h2 class="page_header">İlan Ver</h2>
+    <hr>
+    {% if form.errors %}
+        {{form.errors}}
+    {% endif %}
+    <div>
+        <form enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            {{form.media}}
+            {{form|crispy}}
+            <div class="row">
+            <div class="col-md-6">
+            {{formset.management_form}}
+            {% for form in formset %}
+                {{ form }} <hr>
+            {% endfor %}
+            </div>
+            <div class="col-md-6">
+            <button type="submit" id="inp" class="btn btn-outline-primary" style="float:right;">Kaydet</button>
+            </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+<style>
+    .inp{
+        margin: 5px;
+    }
+ </style>
+ {% endblock %}
+

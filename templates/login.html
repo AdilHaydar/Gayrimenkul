@@ -1,0 +1,34 @@
+{% extends "main_page.html" %}
+{% load crispy_forms_tags %}
+
+{% block icerik %}
+<body style = background-color:midnightblue;color:White;>
+<div class="container">
+    <h3>Giriş Yap</h3>
+    <hr style="background:White;">
+  <div class="row">
+    <div class="col">
+      <form method = "post">
+        {% csrf_token %}
+        {{form|crispy}}
+        <br>
+        <button type = "submit" class = "btn btn-primary">Giriş Yap</button>
+    </div>
+    
+    </form>
+  </div>
+  <br>
+  <div class="col"> 
+        Eğer bir hesabın yoksa, <a href="/user/register">Kayıt Ol</a>
+    </div>
+</div>
+</body>
+<style>
+ #id_username, #id_password{
+   border-radius:10px;
+   padding: 3px 5px;
+   margin: 2px;
+ }
+</style>
+
+{% endblock %}

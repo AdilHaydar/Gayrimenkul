@@ -1,0 +1,75 @@
+{% extends "main_page.html" %}
+{% load crispy_forms_tags %}
+{% block head %}
+
+{% endblock head %}
+{% block icerik %}
+<body style = "background-color:midnightblue;color:White;">
+
+    <div class="container">
+        <h3>{{userInfo.username}} Panel</h3>
+        <hr style="background:White;">
+    <div class="row">
+        <div class="col">
+        {% if request.user.username == username or request.user.is_admin %}
+        <form method = "post">
+            {% csrf_token %}
+            <div id="div_id_email" class="form-group">
+            <label for="id_email" class="col-form-label requiredField">Email<span class="asteriskField">*</span></label>
+            </div>
+            <div>
+                <input type="email" name="email" maxlength="255" class="emailinput form-control" id="id_email" value="{{userInfo.email}}" required />
+            </div>
+            <div id="div_id_cep_telefonu" class="form-group">
+                <label for="id_cep_telefonu" class="col-form-label requiredField">Cep Telefonu<span class="asteriskField">*</span></label>
+            </div>
+            <div> 
+                <input type="text" name="cep_telefonu" maxlength="20" class="textinput textInput form-control" id="id_cep_telefonu" value="{{userInfo.cep_telefonu}}" required />
+            </div>
+            <div id="div_id_is_telefonu" class="form-group">
+                <label for="id_is_telefonu" class="col-form-label requiredField">İş Telefonu<span class="asteriskField">*</span></label>
+            </div>
+            <div> 
+                <input type="text" name="is_telefonu" maxlength="20" class="textinput textInput form-control" id="id_is_telefonu" value="{{userInfo.is_telefonu}}" />
+            </div>
+            <div id="div_id_full_name" class="form-group">
+                <label for="id_full_name" class="col-form-label requiredField">Ad Soyad<span class="asteriskField">*</span></label>
+            </div>
+            <div> 
+                <input type="text" name="full_name" maxlength="30" class="textinput textInput form-control" id="id_full_name" value="{{userInfo.full_name}}" required />
+            </div>
+            <div id="div_id_password" class="form-group">
+                <label for="id_password" class="col-form-label requiredField">Şifre<span class="asteriskField">*</span></label>
+            </div>
+            <div> 
+                <input type="password" name="password" class="textinput textInput form-control" id="id_password" required/>
+            </div>
+            <div id="div_id_confirm" class="form-group">
+                <label for="id_confirm" class="col-form-label requiredField">Şifre(Tekrar)<span class="asteriskField">*</span></label>
+            </div>
+            <div> 
+                <input type="password" name="confirm"  class="textinput textInput form-control" id="id_confirm" required />
+            </div>
+            <br>
+            <button type = "submit" class = "btn btn-primary">Edit Profile</button>
+        </div>
+        </form>
+        {% else %}
+        <div align="center">
+        <p style="color:red;font:16px bold;">Bu Sayfayı Görüntüleme Yetkiniz Yok !</p>
+        <script>
+        setTimeout(function(){   
+        window.location.assign("/");
+        //3 saniye sonra yönlenecek
+        }, 3000);
+        </script>
+        </div>
+        
+        {% endif %}
+        
+    </div>
+    <br>
+    </div>
+</body>
+
+{% endblock %}

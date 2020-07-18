@@ -1,0 +1,18 @@
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{message.tags}} alert-dismissible" id="alert" role="alert">
+            <button type="button"  class="close" id="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<script>
+var alertBox = document.getElementById("alert");
+
+document.getElementById("close").onclick = function (e){
+    alertBox.style.display = "none";
+}
+</script>
