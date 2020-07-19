@@ -136,11 +136,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 CKEDITOR_CONFIGS = {
     'default' : {
-        'toolbar' : 'awesome', #bunu kapatıp altta awesome_ckeditörde toolbar ayarını basic'e çekebiliriz. burada çok çok basic yapıyor, ben o kadar basic istemiyorum. aynı zamanda görüntüsünü bozuyor. awesome'da bozuyor ama onda daha fazla toolbar özelliği olduğu için o kadar çok bi bozulma olmuyor.
-        #eğer görüntü bozulmasın istiyorsam 900px olan width değerini kullanmam lazım.
+        'toolbar' : 'awesome', 
+       
         'height' : '300px' ,
         'width' : '1110px',
-        #'width' : '99%', #böyle yada üstteki 900px yaparak tam oturtabiliyorum ekranana ckeditoru
+        
     },
     'awesome_ckeditor' : {
         'toolbar' : 'basic',
