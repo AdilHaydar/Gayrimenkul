@@ -15,16 +15,18 @@
             {% csrf_token %}
             {{form.media}}
             {{form|crispy}}
+    </div>
             <div class="row">
-            <div class="col-md-6">
-            {{ formset.management_form }}
-            {% for form in formset %}
-                {% if form.image.value != None %}
-                <img width="40%" src="/media/{{form.image.value}}" /> <br>
-                {% endif %}
-                {{form}}
-                <hr>
+            <div class="col-md-12">
+            <hr>
+            {% for image in formset %}
+                <img src="/media/{{ image.image }}" width="20%" style="margin-top:5px;" />
+                <label> Kaldır </label>
+                <input type="checkbox" name="delete" value="{{image.id}}" id="id_delete" /> <br>
             {% endfor %}
+            <hr>
+            <label>Select Image : </label>
+            <input type="file" id="id_files" name="files" multiple><br>
             </div>
             <div class="col-md-6">
             <button type="submit" id="inp" class="btn btn-outline-primary" style="float:right;">Kaydet</button>
@@ -33,7 +35,7 @@
         </form>
     </div>
 </div>
-</div>
+
 <style>
     .inp{
         margin: 5px;
