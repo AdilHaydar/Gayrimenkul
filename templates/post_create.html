@@ -17,10 +17,8 @@
             {{form|crispy}}
             <div class="row">
             <div class="col-md-6">
-            {{formset.management_form}}
-            {% for form in formset %}
-                {{ form }} <hr>
-            {% endfor %}
+            <label>Select Image : </label>
+            <input type="file" id="id_files" name="files" multiple><br>
             </div>
             <div class="col-md-6">
             <button type="submit" id="inp" class="btn btn-outline-primary" style="float:right;">Kaydet</button>
