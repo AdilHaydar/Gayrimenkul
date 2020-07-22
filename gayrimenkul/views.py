@@ -1,12 +1,10 @@
 from django.shortcuts import render,HttpResponse,redirect,reverse,HttpResponseRedirect,Http404,get_object_or_404
 from .models import Post, PostImage
 from django.contrib import messages
-from django.forms import modelformset_factory
-from .forms import PostForm, PostImageForm
+from .forms import PostForm
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
-from django.core.files.storage import FileSystemStorage
 import os
 # Create your views here.
 
@@ -19,26 +17,21 @@ def index(request):
 def post_create(request):
     if not request.user.is_authenticated:
         raise Http404
-    ImageFormSet = modelformset_factory(PostImage, form=PostImageForm, extra=5)
-   
     if request.method == 'POST':
         post_form = PostForm(request.POST, request.FILES)
-        formset = ImageFormSet(request.POST, request.FILES, queryset=PostImage.objects.none())
         if post_form.is_valid():
             created_post = post_form.save(commit=False)
             created_post.seller = request.user
             created_post.save()
-            for form in formset.cleaned_data:
-                if form:
-                    image = form['image']
-                    photo = PostImage(post=created_post, image=image)
-                    photo.save()
+            if request.FILES.getlist('files'):
+                for file in request.FILES.getlist('file'):
+                    obj = PostImage(post=created_post, image=file)
+                    obj.save()
             messages.success(request,'Tebrikler, İlanınız Başarıyla Verildi.')
             return HttpResponseRedirect(reverse('gayrimenkul:detail',kwargs={'slug':created_post.get_slug()}))
     else:
         post_form = PostForm()
-        formset = ImageFormSet(queryset = PostImage.objects.none())
-    return render(request,'post_create.html',{'form':post_form,'formset':formset})
+    return render(request,'post_create.html',{'form':post_form})
 
 @login_required(login_url = "user:login")
 def post_detail(request,slug):
@@ -48,10 +41,7 @@ def post_detail(request,slug):
         except ObjectDoesNotExist:
             raise Http404
         if request.user == post.seller or request.user.is_admin:
-            
             images = PostImage.objects.filter(post=post)
-            for i in images:
-                print(i.image)
             return render(request,'ilan_detay.html',{'post':post,'images':images})
         else:
             raise Http404
@@ -79,28 +69,19 @@ def post_update(request, slug):
     if not request.user.is_authenticated and (not request.user == post.seller or not request.user.is_admin):
         raise Http404
     data = PostImage.objects.filter(post = post)
-    ImageFormSet = modelformset_factory(PostImage, form=PostImageForm, extra=5, can_delete = True)
-    form = PostForm(prefix='post',data=request.POST or None, instance = post, files = request.FILES or None)
-    formset = ImageFormSet(data=request.POST or None, files= request.FILES or None, queryset=data)
+    form = PostForm(data=request.POST or None, instance= post, files = request.FILES or None)
     if form.is_valid():
-        if formset.is_valid():
-            for index, f in enumerate(formset):
-                if f.cleaned_data:
-                    if f.cleaned_data['id'] is None:
-                        pic = PostImage(post=post, image=f.cleaned_data.get('image'))
-                        pic.save()
-                    elif request.POST.get('form-'+str(index)+'-DELETE') != None:
-                        pic = PostImage.objects.get(id = request.POST.get('form-' + str(index) + '-id'))
-                        pic.delete()
-                    else:
-                        pic = PostImage(post=post, image=f.cleaned_data.get('image'))
-                        d = PostImage.objects.get(id=data[index].id)
-                        d.image = pic.image
-                        d.save()
+        if request.POST.getlist('delete'):
+            for deleteImage in request.POST.getlist('delete'):
+                PostImage.objects.get(id=deleteImage).delete()
+        if request.FILES.getlist('file'):
+            for file in request.FILES.getlist('files'):
+                obj = PostImage(post=post, image=file)
+                obj.save()
         form.save(commit=True)
         messages.success(request,"İlanınız Başarıyla Güncellenmiştir")
         return HttpResponseRedirect(reverse('gayrimenkul:detail',kwargs={'slug':form.instance.slug}))
-    return render(request,'post_update.html',{'form':form,'formset':formset,'slug':slug})
+    return render(request, 'post_update.html',{'form':form, 'formset':data, 'slug':slug})
 
 @login_required()
 def post_delete(request,slug):
